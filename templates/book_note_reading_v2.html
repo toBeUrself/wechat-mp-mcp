@@ -1,0 +1,173 @@
+<div
+    style="
+        font-family:
+            -apple-system, BlinkMacSystemFont, &quot;Helvetica Neue&quot;,
+            &quot;PingFang SC&quot;, &quot;Microsoft YaHei&quot;, Arial,
+            sans-serif;
+        color: #333;
+        font-size: 16px;
+        line-height: 2;
+    "
+>
+    <section style="margin: 25px 0 35px">
+        <p
+            style="
+                margin: 0 0 12px;
+                font-size: 15px;
+                color: #b8864b;
+                font-weight: 600;
+            "
+        >
+            📚 阅读笔记
+        </p>
+        <p style="margin: 0; color: #555; font-size: 16px; line-height: 2">
+            每一本书，都是一次与优秀思想的交流。<br />这篇文章记录《{{book_name}}》带来的启发，以及它对现实生活的思考。
+        </p>
+    </section>
+    <section
+        style="
+            margin: 30px 0;
+            padding-left: 15px;
+            border-left: 3px solid #b8864b;
+        "
+    >
+        <p style="margin: 5px 0">📖 {{book_name}}</p>
+        <p style="margin: 5px 0; color: #777">✍️ {{author}}</p>
+    </section>
+    <h2
+        style="
+            font-size: 20px;
+            font-weight: 700;
+            margin: 45px 0 15px;
+            color: #222;
+        "
+    >
+        为什么读这本书
+    </h2>
+    <p style="margin: 0; color: #444">{{{why_read_html}}}</p>
+    <h2
+        style="
+            font-size: 20px;
+            font-weight: 700;
+            margin: 45px 0 15px;
+            color: #222;
+        "
+    >
+        一句话总结
+    </h2>
+    <div
+        style="
+            background: #faf7f2;
+            padding: 16px;
+            border-radius: 8px;
+            color: #444;
+        "
+    >
+        {{{summary_html}}}
+    </div>
+    <h2
+        style="
+            font-size: 20px;
+            font-weight: 700;
+            margin: 45px 0 15px;
+            color: #222;
+        "
+    >
+        核心观点
+    </h2>
+    {{#each core_points}}
+    <h3
+        style="
+            font-size: 18px;
+            font-weight: 700;
+            margin: 35px 0 12px;
+            color: #222;
+        "
+    >
+        {{number}} · {{title}}
+    </h3>
+    <p style="margin: 0; color: #444; line-height: 2">{{{content_html}}}</p>
+    {{#if extension_html}}
+    <p
+        style="
+            margin: 18px 0;
+            padding-left: 14px;
+            border-left: 2px solid #ddd;
+            font-size: 15px;
+            color: #777;
+            line-height: 1.9;
+        "
+    >
+        延伸思考：<br />{{{extension_html}}}
+    </p>
+    {{/if}}
+    {{#if example_html}}
+    <p style="margin: 18px 0; padding-left: 14px; border-left: 2px solid #ddd; color: #777;">案例：<br />{{{example_html}}}</p>
+    {{/if}}{{/each}}
+    <h2
+        style="
+            font-size: 20px;
+            font-weight: 700;
+            margin: 45px 0 15px;
+            color: #222;
+        "
+    >
+        书中案例
+    </h2>
+    <p style="margin: 0; color: #444; line-height: 2">{{{example_html}}}</p>
+    <h2
+        style="
+            font-size: 20px;
+            font-weight: 700;
+            margin: 45px 0 15px;
+            color: #222;
+        "
+    >
+        我的思考
+    </h2>
+    <p style="margin: 0; color: #444; line-height: 2">{{{thoughts_html}}}</p>
+    <h2
+        style="
+            font-size: 20px;
+            font-weight: 700;
+            margin: 45px 0 15px;
+            color: #222;
+        "
+    >
+        适合谁读
+    </h2>
+    <div style="padding-left: 5px; color: #555">{{{target_reader_html}}}</div>
+    <h2
+        style="
+            font-size: 20px;
+            font-weight: 700;
+            margin: 45px 0 15px;
+            color: #222;
+        "
+    >
+        可以实践的事情
+    </h2>
+    <div>
+        {{#each actions}}
+        <p style="margin: 12px 0; color: #444">
+            <span style="color: #b8864b; font-weight: bold">✓</span>
+            {{{text_html}}}
+        </p>
+        {{/each}}
+    </div>
+    <section
+        style="
+            margin-top: 55px;
+            padding-top: 30px;
+            border-top: 1px solid #eee;
+            text-align: center;
+        "
+    >
+        <p style="margin: 0; color: #777; font-size: 15px; line-height: 1.8">
+            读书不是为了收藏更多知识，而是为了改变自己的思考方式。
+        </p>
+        <p style="margin-top: 12px; color: #aaa; font-size: 14px">
+            持续阅读，持续成长。
+        </p>
+    </section>
+</div>

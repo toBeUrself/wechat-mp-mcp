@@ -1,0 +1,57 @@
+<div
+    style="
+        font-family:
+            -apple-system, BlinkMacSystemFont, &quot;PingFang SC&quot;,
+            &quot;Microsoft YaHei&quot;, sans-serif;
+        color: #333;
+        font-size: 16px;
+        line-height: 2;
+    "
+>
+    <section style="margin: 25px 0 35px">
+        <p style="color: #166534; font-weight: 700">📈 投资阅读笔记</p>
+        <p style="color: #555">理解投资背后的逻辑，建立长期主义的财富认知。</p>
+    </section>
+    <section style="padding-left: 15px; border-left: 3px solid #166534">
+        <p>📖 {{book_name}}</p>
+        <p style="color: #777">✍️ {{author}}</p>
+    </section>
+    <h2>投资核心逻辑</h2>
+    <p>{{{investment_thesis_html}}}</p>
+    <h2>关键观点</h2>
+    {{#each principles}}
+    <h3 style="margin-top: 30px; font-size: 18px">{{number}} · {{title}}</h3>
+    <p>{{{content_html}}}</p>
+    {{#if example_html}}
+    <p
+        style="
+            background: #f6f8f6;
+            padding: 15px;
+            border-radius: 8px;
+            color: #555;
+        "
+    >
+        案例：<br />{{{example_html}}}
+    </p>
+    {{/if}}{{/each}}
+    <h2>风险与边界</h2>
+    <p style="padding-left: 15px; border-left: 2px solid #ddd">
+        {{{risk_html}}}
+    </p>
+    <h2>我的投资思考</h2>
+    <p>{{{thoughts_html}}}</p>
+    <h2>实践建议</h2>
+    {{#each actions}}
+    <p><span style="color: #166534">✓</span> {{{text_html}}}</p>
+    {{/each}}
+    <section
+        style="
+            margin-top: 50px;
+            padding-top: 25px;
+            border-top: 1px solid #eee;
+            text-align: center;
+        "
+    >
+        <p style="color: #777">投资不是预测未来，而是在不确定中管理风险。</p>
+    </section>
+</div>

@@ -230,13 +230,15 @@ mod tests {
         fs::write(
             &path,
             r#"{
-              "title":"系统思维读书笔记",
               "book_name":"系统之美",
               "author":"德内拉·梅多斯",
+              "why_read":"理解系统。",
               "summary":"结构决定行为。",
-              "core_points":[{"title":"系统思维","content":"先看结构。"}],
+              "core_points":[{"number":"01","title":"系统思维","content":"先看结构。","extension":""}],
+              "example":"反馈回路。",
               "thoughts":"从整体开始。",
-              "actions":["画出反馈回路"]
+              "target_reader":"希望改善思考方式的人。",
+              "actions":[{"text":"画出反馈回路"}]
             }"#,
         )
         .unwrap();

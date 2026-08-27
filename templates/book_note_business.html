@@ -1,0 +1,73 @@
+<div
+    style="
+        font-family:
+            -apple-system, BlinkMacSystemFont, &quot;Helvetica Neue&quot;,
+            &quot;PingFang SC&quot;, &quot;Microsoft YaHei&quot;, Arial,
+            sans-serif;
+        color: #333;
+        font-size: 16px;
+        line-height: 2;
+    "
+>
+    <section style="margin: 25px 0 35px">
+        <p
+            style="
+                color: #b7791f;
+                font-size: 15px;
+                font-weight: 700;
+                margin: 0 0 10px;
+            "
+        >
+            💼 商业阅读笔记
+        </p>
+        <p style="margin: 0; color: #555">
+            拆解一本商业书中的关键方法，理解企业增长、商业模式和管理背后的逻辑。
+        </p>
+    </section>
+    <section
+        style="
+            padding-left: 15px;
+            border-left: 3px solid #b7791f;
+            margin: 30px 0;
+        "
+    >
+        <p>📖 {{book_name}}</p>
+        <p style="color: #777">✍️ {{author}}</p>
+    </section>
+    <h2>这本书解决什么问题</h2>
+    <p>{{{problem_html}}}</p>
+    <h2>核心商业洞察</h2>
+    {{#each insights}}
+    <h3>{{number}} · {{title}}</h3>
+    <p>{{{content_html}}}</p>
+    {{#if case_html}}
+    <p
+        style="
+            padding-left: 15px;
+            border-left: 2px solid #ddd;
+            color: #777;
+            font-size: 15px;
+        "
+    >
+        案例：<br />{{{case_html}}}
+    </p>
+    {{/if}}{{/each}}
+    <h2>商业启发</h2>
+    <div style="background: #faf7f2; padding: 16px; border-radius: 8px">
+        {{{business_thoughts_html}}}
+    </div>
+    <h2>可以应用的方法</h2>
+    {{#each actions}}
+    <p><span style="color: #b7791f">✓</span> {{{text_html}}}</p>
+    {{/each}}
+    <section
+        style="
+            margin-top: 50px;
+            padding-top: 25px;
+            border-top: 1px solid #eee;
+            text-align: center;
+        "
+    >
+        <p style="color: #777">商业的本质，是持续创造并交换价值。</p>
+    </section>
+</div>

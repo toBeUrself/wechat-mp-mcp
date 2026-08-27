@@ -2,11 +2,11 @@
 
 可部署到云服务器的 Streamable HTTP MCP Server：把结构化读书笔记 JSON 渲染为固定的微信公众号 HTML 模板，并管理封面、草稿、发布任务和已发布文章。HTTP MCP 端点是 `/mcp`，同时保留可选 stdio 模式。
 
-设计与安全边界见 [DESIGN.md](./DESIGN.md)。模板位于 [templates/book_note.html.hbs](./templates/book_note.html.hbs)。
+设计与安全边界见 [DESIGN.md](./DESIGN.md)。模板位于 [templates](./templates/)：`reading`、`business`、`tech`、`invest` 四种 `style` 会分别选择对应模板。
 
 ## 能力
 
-- 将标题、书名、作者、总结、核心观点、思考和行动项渲染成固定样式；
+- 将书名、作者、阅读原因、总结、核心观点、案例、思考、读者和行动项渲染成通用阅读模板；
 - 所有笔记字段按纯文本处理，自动 HTML 转义，换行转换为 `<br>`；
 - 从受限本地目录上传永久封面，或复用已有永久素材 `media_id`；
 - 查询公众号永久图片素材，获取可复用的 `media_id`；
@@ -163,15 +163,15 @@ WECHAT_TRANSPORT=http WECHAT_HTTP_BIND=127.0.0.1:8000 ./target/debug/wechat-mp-m
 
 ```json
 {
-  "title": "系统思维读书笔记",
   "book_name": "系统之美",
   "author": "德内拉·梅多斯",
+  "why_read": "理解系统如何运作。",
   "summary": "系统的行为主要由内部结构决定。",
-  "core_points": [
-    {"title": "系统思维", "content": "不要只关注事件，要关注背后的结构。"}
-  ],
+  "core_points": [{"number": "01", "title": "系统思维", "content": "不要只关注事件，要关注背后的结构。", "extension": ""}],
+  "example": "书中的反馈回路案例。",
   "thoughts": "理解结构之后，解决问题的方式也会改变。",
-  "actions": ["遇到问题时先画出关键变量"]
+  "target_reader": "希望改善思考方式的人。",
+  "actions": [{"text": "遇到问题时先画出关键变量"}]
 }
 ```
 
@@ -221,25 +221,17 @@ jq -n --slurpfile note note.json '{jsonrpc:"2.0",id:2,method:"tools/call",params
 ```json
 {
   "note": {
-    "title": "为什么要学习系统思维",
+    "style": "reading",
+    "category": "成长",
+    "tags": ["认知", "成长"],
     "book_name": "系统之美",
     "author": "德内拉·梅多斯",
+    "why_read": "理解系统如何运作。",
     "summary": "系统的行为主要由内部结构决定。",
-    "core_points": [
-      {
-        "title": "系统思维",
-        "content": "不要只关注事件，要关注背后的结构。"
-      },
-      {
-        "title": "反馈机制",
-        "content": "长期结果往往由反馈循环决定。"
-      }
-    ],
+    "core_points": [{"number": "01", "title": "系统思维", "content": "不要只关注事件，要关注背后的结构。", "extension": "", "example": ""}],
     "thoughts": "理解结构之后，解决问题的方式也会改变。",
-    "actions": [
-      "遇到问题时先画出关键变量",
-      "区分增强回路和调节回路"
-    ]
+    "target_reader": "希望改善思考方式的人。",
+    "actions": [{"text": "遇到问题时先画出关键变量"}, {"text": "区分增强回路和调节回路"}]
   },
   "cover": {
     "type": "file_path",
@@ -264,7 +256,7 @@ jq -n --slurpfile note note.json '{jsonrpc:"2.0",id:2,method:"tools/call",params
 
 约束：
 
-- `title` 最多 32 个字符；模板正文用《书名》小标题，避免和微信页面标题重复；
+- `title` 可选，最多 32 个字符；省略时自动使用“书名读书笔记”；
 - `core_points` 和 `actions` 至少各一项，所有必填字符串不能为空；
 - `article_author` 最多 16 个字符；`digest` 最多 120 个字符；
 - 未传 `digest` 时使用 `summary` 的前 120 个字符；

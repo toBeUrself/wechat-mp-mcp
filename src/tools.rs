@@ -452,7 +452,7 @@ fn article_json(
 ) -> Result<Value, McpError> {
     let mut article = Map::new();
     article.insert("article_type".into(), Value::String("news".into()));
-    article.insert("title".into(), Value::String(note.title.trim().into()));
+    article.insert("title".into(), Value::String(article_title(note)));
     article.insert("content".into(), Value::String(html));
     article.insert(
         "digest".into(),
@@ -483,6 +483,17 @@ fn article_json(
         options.content_source_url.as_deref(),
     );
     Ok(Value::Object(article))
+}
+
+fn article_title(note: &BookNoteInput) -> String {
+    let title = note
+        .title
+        .as_deref()
+        .filter(|value| !value.trim().is_empty())
+        .map(str::trim)
+        .map(str::to_owned)
+        .unwrap_or_else(|| format!("{}读书笔记", note.book_name.trim()));
+    title.chars().take(32).collect()
 }
 
 fn validate_article_options(options: &ArticleOptions) -> Result<(), McpError> {
@@ -603,16 +614,28 @@ mod tests {
 
     fn note() -> BookNoteInput {
         BookNoteInput {
-            title: "系统思维读书笔记".into(),
+            title: None,
+            style: crate::template::NoteStyle::Reading,
+            category: None,
+            tags: vec![],
             book_name: "系统之美".into(),
             author: "德内拉·梅多斯".into(),
+            why_read: "理解系统如何运作。".into(),
             summary: "结构决定行为。".into(),
             core_points: vec![crate::template::CorePointInput {
+                number: Some("01".into()),
                 title: "系统思维".into(),
                 content: "关注结构，而不只是事件。".into(),
+                extension: None,
+                example: None,
             }],
+            sections: None,
+            example: Some("反馈回路案例。".into()),
             thoughts: "先看整体。".into(),
-            actions: vec!["画出反馈回路".into()],
+            target_reader: "希望改善思考方式的人。".into(),
+            actions: vec![crate::template::ActionInput {
+                text: "画出反馈回路".into(),
+            }],
         }
     }
 
