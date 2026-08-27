@@ -97,13 +97,18 @@ WECHAT_HTTP_ALLOWED_HOSTS=203.0.113.10:8000
 WECHAT_HTTP_PORT=8000
 ```
 
-首次启动：
+首次启动。Compose 默认拉取 GitHub Actions 构建的 `ghcr.io/tobeurself/wechat-mp-mcp:latest`：
 
 ```bash
-docker compose up -d --build
+docker compose pull
+docker compose up -d
 docker compose ps
 curl --fail http://127.0.0.1:8000/healthz
 ```
+
+`main` 分支每次推送都会通过 GitHub Actions 构建并发布 `linux/amd64`、`linux/arm64` 镜像，同时生成 `latest` 和 `sha-*` 标签；推送 `v1.2.3` 形式的 Git 标签时还会生成版本标签。工作流使用仓库自带的 `GITHUB_TOKEN`，不需要额外配置 Registry 密钥。
+
+GHCR 镜像首次发布后可能默认为私有。若希望服务器免登录拉取，请在 GitHub Package 设置中将其改为 Public；保持私有时，服务器需要先使用具备 `read:packages` 权限的 Token 登录 `ghcr.io`。
 
 健康检查返回 `ok` 后，远程 MCP 地址为 `http://服务器公网IP:8000/mcp`，请求仍需携带 `we-user: tobeurself`。确认只读工具正常后，如需上传封面、创建草稿或发布文章，把 `.env` 中的 `WECHAT_ALLOW_WRITE` 改为 `true`，然后重建容器配置：
 
@@ -118,7 +123,8 @@ docker compose up -d --force-recreate
 ```bash
 docker compose logs -f --tail=100
 git pull --ff-only
-docker compose up -d --build
+docker compose pull
+docker compose up -d
 docker compose down
 ```
 

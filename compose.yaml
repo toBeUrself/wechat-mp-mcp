@@ -1,9 +1,6 @@
 services:
   wechat-mp-mcp:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: wechat-mp-mcp:local
+    image: ghcr.io/tobeurself/wechat-mp-mcp:latest
     env_file:
       - .env
     environment:
