@@ -1,0 +1,25 @@
+[Unit]
+Description=WeChat Official Account Book Note MCP
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=wechat-mcp
+Group=wechat-mcp
+EnvironmentFile=/etc/wechat-mp-mcp.env
+ExecStart=/opt/wechat-mp-mcp/wechat-mp-mcp
+Restart=on-failure
+RestartSec=5s
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+
+[Install]
+WantedBy=multi-user.target

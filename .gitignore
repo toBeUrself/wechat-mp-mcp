@@ -1,0 +1,5 @@
+/target
+/dist
+.env
+book-note.html
+.codex

@@ -1,0 +1,73 @@
+<div style="font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue','PingFang SC','Microsoft YaHei',Arial,sans-serif;color:#333;line-height:1.8;font-size:16px;">
+
+    <!-- 书名小标题：微信公众号页面会单独显示文章标题 -->
+    <h2 style="
+        font-size:22px;
+        line-height:1.4;
+        color:#222;
+        font-weight:700;
+        margin:20px 0;
+    ">
+        《{{ book_name }}》
+    </h2>
+
+    <!-- 固定开头 -->
+    <section style="
+        background:#f7f7f7;
+        padding:16px 18px;
+        border-radius:8px;
+        margin:20px 0;
+    ">
+        <p style="margin:0 0 10px;color:#666;font-size:15px;">
+            📚 阅读，是一次与优秀思想的交流。
+        </p>
+        <p style="margin:0;color:#666;font-size:15px;">
+            今天分享《{{ book_name }}》的阅读笔记，记录书中的核心观点，以及这些观点带来的思考。
+        </p>
+    </section>
+
+    <!-- 书籍信息 -->
+    <section style="margin:25px 0;padding-left:15px;border-left:4px solid #07c160;">
+        <p style="margin:5px 0;color:#666;">📖 书名：{{ book_name }}</p>
+        <p style="margin:5px 0;color:#666;">✍️ 作者：{{ author }}</p>
+    </section>
+
+    <!-- 一句话总结 -->
+    <h2 style="font-size:21px;color:#222;margin:30px 0 15px;">一句话总结</h2>
+    <div style="background:#f0f9f4;padding:15px 18px;border-radius:8px;color:#333;">
+        {{{ summary_html }}}
+    </div>
+
+    <!-- 核心观点 -->
+    <h2 style="font-size:21px;color:#222;margin:35px 0 15px;">核心观点</h2>
+    {{#each core_points}}
+    <section style="margin:0 0 22px;">
+        <p style="margin:0 0 8px;color:#07c160;font-size:17px;font-weight:600;">
+            {{ number }} · {{ title }}
+        </p>
+        <p style="margin:0;color:#444;line-height:2;">{{{ content_html }}}</p>
+    </section>
+    {{/each}}
+
+    <!-- 我的思考 -->
+    <h2 style="font-size:21px;color:#222;margin:35px 0 15px;">我的思考</h2>
+    <p style="margin:0;color:#444;line-height:2;">{{{ thoughts_html }}}</p>
+
+    <!-- 实践部分 -->
+    <h2 style="font-size:21px;color:#222;margin:35px 0 15px;">可以实践的事情</h2>
+    <div style="background:#fafafa;padding:15px 18px;border-radius:8px;">
+        {{#each actions}}
+        <p style="margin:6px 0;color:#444;line-height:1.8;">✅ {{{ text_html }}}</p>
+        {{/each}}
+    </div>
+
+    <!-- 固定结尾 -->
+    <section style="margin-top:40px;padding-top:20px;border-top:1px solid #eee;">
+        <p style="color:#666;font-size:15px;line-height:1.8;">
+            读书不是为了收藏更多知识，而是为了改变自己的思考方式。
+        </p>
+        <p style="color:#999;font-size:14px;">持续阅读，持续成长。</p>
+        <p style="color:#ccc;font-size:12px;">注意：本内容由 agent 梳理，勿信勿用！。</p>
+    </section>
+
+</div>

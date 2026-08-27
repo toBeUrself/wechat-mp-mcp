@@ -1,0 +1,24 @@
+[package]
+name = "wechat-mp-mcp"
+version = "0.1.0"
+edition = "2024"
+description = "HTTP MCP server for WeChat Official Account book-note publishing"
+license = "UNLICENSED"
+
+[dependencies]
+anyhow = "1"
+axum = "0.8.9"
+handlebars = "6.4.4"
+reqwest = { version = "0.13", default-features = false, features = ["json", "query", "multipart", "rustls"] }
+rmcp = { version = "3.1", features = ["server", "transport-io", "transport-streamable-http-server"] }
+schemars = "1"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tokio = { version = "1", features = ["fs", "macros", "net", "rt-multi-thread", "signal", "sync", "time"] }
+
+[dev-dependencies]
+httpmock = "0.8"
+tempfile = "3"
+
+[profile.release]
+strip = "symbols"
