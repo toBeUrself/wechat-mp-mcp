@@ -106,7 +106,7 @@ docker compose ps
 curl --fail http://127.0.0.1:8000/healthz
 ```
 
-`main` 分支每次推送都会通过 GitHub Actions 构建并发布 `linux/amd64`、`linux/arm64` 镜像，同时生成 `latest` 和 `sha-*` 标签；推送 `v1.2.3` 形式的 Git 标签时还会生成版本标签。工作流使用仓库自带的 `GITHUB_TOKEN`，不需要额外配置 Registry 密钥。
+`main` 分支每次推送都会通过 GitHub Actions 构建并发布面向 Ubuntu 24 常见 `x86_64` 主机的 `linux/amd64` 镜像，同时生成 `latest` 和 `sha-*` 标签；推送 `v1.2.3` 形式的 Git 标签时还会生成版本标签。工作流使用仓库自带的 `GITHUB_TOKEN`，不需要额外配置 Registry 密钥。
 
 GHCR 镜像首次发布后可能默认为私有。若希望服务器免登录拉取，请在 GitHub Package 设置中将其改为 Public；保持私有时，服务器需要先使用具备 `read:packages` 权限的 Token 登录 `ghcr.io`。
 
