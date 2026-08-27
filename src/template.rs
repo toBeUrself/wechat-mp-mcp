@@ -455,6 +455,14 @@ mod tests {
         assert!(rendered.html.contains("延伸思考"));
         assert!(rendered.html.contains("✓"));
     }
+
+    #[test]
+    fn omits_empty_book_case_section() {
+        let mut input = note();
+        input.example = None;
+        let rendered = BookNoteRenderer::new().unwrap().render(&input).unwrap();
+        assert!(!rendered.html.contains("书中案例"));
+    }
     #[test]
     fn escapes_untrusted_text() {
         let mut input = note();
