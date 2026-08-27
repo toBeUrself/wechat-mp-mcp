@@ -75,6 +75,58 @@ we-user: tobeurself
 
 这个 Header 是按当前要求提供的轻量校验，并非强认证。公网部署仍应使用 HTTPS 反向代理、云安全组限制来源 IP 或私网/VPN。远程模式下 `file_path` 指的是云服务器文件系统，不是 MCP 客户端本机路径；封面应预先放入 `WECHAT_MEDIA_ROOT`，或直接复用已有的 `media_id`。可参考 [systemd 示例](./deploy/wechat-mp-mcp.service.example)，敏感变量应放在权限为 `0600` 的 `/etc/wechat-mp-mcp.env`。
 
+### Ubuntu 24 + Docker Compose
+
+服务器已安装 Git、Docker 和 Docker Compose 时，可直接部署：
+
+```bash
+git clone https://github.com/toBeUrself/wechat-mp-mcp.git
+cd wechat-mp-mcp
+cp .env.example .env
+mkdir -p data/media
+chmod 600 .env
+```
+
+编辑 `.env`，至少填写公众号凭证，并将 `WECHAT_HTTP_ALLOWED_HOSTS` 改成客户端实际访问时使用的 `Host`。直接通过公网 IP 和默认端口访问时，例如：
+
+```dotenv
+WECHAT_APP_ID=你的公众号AppID
+WECHAT_APP_SECRET=你的公众号AppSecret
+WECHAT_ALLOW_WRITE=false
+WECHAT_HTTP_ALLOWED_HOSTS=203.0.113.10:8000
+WECHAT_HTTP_PORT=8000
+```
+
+首次启动：
+
+```bash
+docker compose up -d --build
+docker compose ps
+curl --fail http://127.0.0.1:8000/healthz
+```
+
+健康检查返回 `ok` 后，远程 MCP 地址为 `http://服务器公网IP:8000/mcp`，请求仍需携带 `we-user: tobeurself`。确认只读工具正常后，如需上传封面、创建草稿或发布文章，把 `.env` 中的 `WECHAT_ALLOW_WRITE` 改为 `true`，然后重建容器配置：
+
+```bash
+docker compose up -d --force-recreate
+```
+
+封面文件放在服务器的 `data/media/`，MCP 工具中使用容器路径，例如 `/data/media/cover.jpg`。该目录以只读方式挂载进容器，服务只能读取并上传文件。
+
+查看日志、更新和停止服务：
+
+```bash
+docker compose logs -f --tail=100
+git pull --ff-only
+docker compose up -d --build
+docker compose down
+```
+
+还需完成两项云端配置：
+
+1. 在微信公众号后台将服务器固定出口 IP 加入 IP 白名单；
+2. 在云安全组中仅向可信客户端 IP 开放 TCP 8000。若使用域名，应通过 HTTPS 反向代理暴露服务，并把域名加入 `WECHAT_HTTP_ALLOWED_HOSTS`。
+
 ## 本地启动并导出完整 HTML
 
 最简单的方式不需要启动 MCP 服务，也不需要 `WECHAT_APP_ID` 或 `WECHAT_APP_SECRET`。把下方示例中的**仅包含 note 对象**的 JSON 保存为 `note.json` 后，直接运行：
