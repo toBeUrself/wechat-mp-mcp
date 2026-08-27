@@ -34,6 +34,7 @@
         <p>📖 {{book_name}}</p>
         <p style="color: #777">✍️ {{author}}</p>
     </section>
+    {{#if book_meta}}<section style="margin:25px 0;padding:12px 15px;background:#fafafa;border-radius:8px;font-size:14px;color:#777;"><p style="margin:0;color:#b7791f;font-weight:600;">📊 阅读参考</p>{{#if book_meta.rating}}<p style="margin:8px 0 0;">{{book_meta.platform}}评分：{{book_meta.rating}} 分{{#if book_meta.rating_count}}（{{book_meta.rating_count}}）{{/if}}</p>{{/if}}{{#if book_meta.reading_count}}<p style="margin:4px 0 0;">在读人数：{{book_meta.reading_count}}</p>{{/if}}<p style="margin:4px 0 0;color:#999;">仅作为阅读参考</p></section>{{/if}}
     <h2>这本书解决什么问题</h2>
     <p>{{{problem_html}}}</p>
     <h2>核心商业洞察</h2>

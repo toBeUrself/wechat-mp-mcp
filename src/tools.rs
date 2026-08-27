@@ -618,6 +618,7 @@ mod tests {
             style: crate::template::NoteStyle::Reading,
             category: None,
             tags: vec![],
+            book_meta: None,
             book_name: "系统之美".into(),
             author: "德内拉·梅多斯".into(),
             why_read: "理解系统如何运作。".into(),

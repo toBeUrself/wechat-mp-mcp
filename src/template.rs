@@ -19,6 +19,8 @@ pub struct BookNoteInput {
     pub category: Option<String>,
     #[serde(default)]
     pub tags: Vec<String>,
+    #[serde(default)]
+    pub book_meta: Option<BookMetaInput>,
     pub book_name: String,
     pub author: String,
     pub why_read: String,
@@ -32,6 +34,22 @@ pub struct BookNoteInput {
     pub thoughts: String,
     pub target_reader: String,
     pub actions: Vec<ActionInput>,
+}
+
+#[derive(Debug, Clone, Deserialize, JsonSchema)]
+pub struct BookMetaInput {
+    #[serde(default)]
+    pub platform: Option<String>,
+    #[serde(default)]
+    pub rating: Option<String>,
+    #[serde(default)]
+    pub rating_count: Option<String>,
+    #[serde(default)]
+    pub want_to_read: Option<String>,
+    #[serde(default)]
+    pub reading_count: Option<String>,
+    #[serde(default)]
+    pub url: Option<String>,
 }
 
 #[derive(Debug, Clone, Default, Deserialize, JsonSchema)]
@@ -225,6 +243,39 @@ impl BookNoteRenderer {
             architecture_html: escape_multiline(&note.summary),
             investment_thesis_html: escape_multiline(&note.summary),
             risk_html: escape_multiline(note.example.as_deref().unwrap_or("")),
+            book_meta: note.book_meta.as_ref().map(|meta| RenderBookMeta {
+                platform: meta
+                    .platform
+                    .as_deref()
+                    .filter(|v| !v.trim().is_empty())
+                    .unwrap_or("微信读书")
+                    .to_owned(),
+                rating: meta
+                    .rating
+                    .as_deref()
+                    .filter(|v| !v.trim().is_empty())
+                    .map(str::to_owned),
+                rating_count: meta
+                    .rating_count
+                    .as_deref()
+                    .filter(|v| !v.trim().is_empty())
+                    .map(str::to_owned),
+                want_to_read: meta
+                    .want_to_read
+                    .as_deref()
+                    .filter(|v| !v.trim().is_empty())
+                    .map(str::to_owned),
+                reading_count: meta
+                    .reading_count
+                    .as_deref()
+                    .filter(|v| !v.trim().is_empty())
+                    .map(str::to_owned),
+                url: meta
+                    .url
+                    .as_deref()
+                    .filter(|v| !v.trim().is_empty())
+                    .map(str::to_owned),
+            }),
         };
         let template_name = match note.style {
             NoteStyle::Reading => "reading",
@@ -275,6 +326,16 @@ struct RenderContext<'a> {
     architecture_html: String,
     investment_thesis_html: String,
     risk_html: String,
+    book_meta: Option<RenderBookMeta>,
+}
+#[derive(Serialize)]
+struct RenderBookMeta {
+    platform: String,
+    rating: Option<String>,
+    rating_count: Option<String>,
+    want_to_read: Option<String>,
+    reading_count: Option<String>,
+    url: Option<String>,
 }
 #[derive(Serialize, Clone)]
 struct RenderCorePoint {
@@ -365,6 +426,7 @@ mod tests {
             style: NoteStyle::Reading,
             category: None,
             tags: vec![],
+            book_meta: None,
             book_name: "系统之美".into(),
             author: "德内拉·梅多斯".into(),
             why_read: "理解系统如何运作。".into(),

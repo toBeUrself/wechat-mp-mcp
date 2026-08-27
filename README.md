@@ -224,6 +224,7 @@ jq -n --slurpfile note note.json '{jsonrpc:"2.0",id:2,method:"tools/call",params
     "style": "reading",
     "category": "成长",
     "tags": ["认知", "成长"],
+    "book_meta": {"platform": "微信读书", "rating": "8.2", "rating_count": "5.6万人评分", "reading_count": "12.5万人在读"},
     "book_name": "系统之美",
     "author": "德内拉·梅多斯",
     "why_read": "理解系统如何运作。",

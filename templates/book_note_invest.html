@@ -16,6 +16,7 @@
         <p>📖 {{book_name}}</p>
         <p style="color: #777">✍️ {{author}}</p>
     </section>
+    {{#if book_meta}}<section style="margin:25px 0;padding:12px 15px;background:#f6f8f6;border-radius:8px;font-size:14px;color:#777;"><p style="margin:0;color:#166534;font-weight:600;">📊 阅读参考</p>{{#if book_meta.rating}}<p style="margin:8px 0 0;">{{book_meta.platform}}评分：{{book_meta.rating}} 分{{#if book_meta.rating_count}}（{{book_meta.rating_count}}）{{/if}}</p>{{/if}}{{#if book_meta.reading_count}}<p style="margin:4px 0 0;">在读人数：{{book_meta.reading_count}}</p>{{/if}}<p style="margin:4px 0 0;color:#999;">仅作为阅读参考</p></section>{{/if}}
     <h2>投资核心逻辑</h2>
     <p>{{{investment_thesis_html}}}</p>
     <h2>关键观点</h2>
