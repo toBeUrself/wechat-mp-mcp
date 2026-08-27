@@ -9,6 +9,7 @@
 - 将标题、书名、作者、总结、核心观点、思考和行动项渲染成固定样式；
 - 所有笔记字段按纯文本处理，自动 HTML 转义，换行转换为 `<br>`；
 - 从受限本地目录上传永久封面，或复用已有永久素材 `media_id`；
+- 查询公众号永久图片素材，获取可复用的 `media_id`；
 - 创建、查询、列表、更新和删除草稿；
 - 提交异步发布、查询状态、读取列表及删除已发布文章；
 - Stable Token 内存缓存、提前刷新和失效重试；
@@ -278,6 +279,7 @@ jq -n --slurpfile note note.json '{jsonrpc:"2.0",id:2,method:"tools/call",params
 | --- | --- | --- |
 | `render_book_note_html` | 读 | 只渲染模板，返回 HTML 和大小 |
 | `upload_cover_image` | 写 | 上传永久封面素材 |
+| `list_permanent_media` | 读 | 查询永久素材列表，默认返回图片及 `media_id` |
 | `create_book_note_draft` | 写 | 渲染并创建单篇草稿 |
 | `update_book_note_draft` | 写 | 更新指定草稿文章，索引从 0 开始 |
 | `get_draft` | 读 | 获取草稿详情 |
@@ -291,6 +293,16 @@ jq -n --slurpfile note note.json '{jsonrpc:"2.0",id:2,method:"tools/call",params
 | `delete_published_article` | 写/确认 | 删除单篇或整组已发布文章 |
 
 列表 `count` 范围为 1～20，默认 10；`offset` 默认 0；`no_content` 默认 `true`。
+
+`list_permanent_media` 默认查询图片素材，也可以传入 `media_type` 为 `image`、`voice`、`video` 或 `news`，并使用 `offset`、`count` 分页。例如查询最近 20 张图片：
+
+```json
+{
+  "media_type": "image",
+  "offset": 0,
+  "count": 20
+}
+```
 
 已发布文章删除不会沿用微信 API 中“省略 index 即删除全部”的危险隐式语义：
 

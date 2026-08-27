@@ -121,6 +121,18 @@ struct UploadCoverImage {
 }
 
 #[derive(Debug, Deserialize, JsonSchema)]
+struct ListPermanentMedia {
+    #[schemars(
+        description = "Permanent material type: image, voice, video, or news; defaults to image"
+    )]
+    media_type: Option<String>,
+    #[schemars(description = "Zero-based result offset; defaults to 0")]
+    offset: Option<u32>,
+    #[schemars(description = "Number of results, 1 through 20; defaults to 20")]
+    count: Option<u32>,
+}
+
+#[derive(Debug, Deserialize, JsonSchema)]
 #[serde(tag = "type", content = "value", rename_all = "snake_case")]
 enum CoverInput {
     #[schemars(description = "Image path inside WECHAT_MEDIA_ROOT")]
@@ -230,6 +242,21 @@ impl WechatMpMcp {
     async fn upload_cover_image(&self, Parameters(p): Parameters<UploadCoverImage>) -> ToolResult {
         self.require_write()?;
         response(self.client.upload_cover(&p.file_path).await)
+    }
+
+    #[tool(
+        description = "List permanent WeChat materials and return media_id values; defaults to permanent images"
+    )]
+    async fn list_permanent_media(
+        &self,
+        Parameters(p): Parameters<ListPermanentMedia>,
+    ) -> ToolResult {
+        let body = permanent_media_body(p)?;
+        response(
+            self.client
+                .post("/cgi-bin/material/batchget_material", body)
+                .await,
+        )
     }
 
     #[tool(
@@ -505,6 +532,29 @@ fn list_body(p: DraftList) -> Result<Value, McpError> {
     }))
 }
 
+fn permanent_media_body(p: ListPermanentMedia) -> Result<Value, McpError> {
+    let media_type = p
+        .media_type
+        .as_deref()
+        .unwrap_or("image")
+        .trim()
+        .to_ascii_lowercase();
+    if !matches!(media_type.as_str(), "image" | "voice" | "video" | "news") {
+        return Err(invalid_params(
+            "media_type must be one of image, voice, video, or news",
+        ));
+    }
+    let count = p.count.unwrap_or(20);
+    if !(1..=20).contains(&count) {
+        return Err(invalid_params("count must be between 1 and 20"));
+    }
+    Ok(json!({
+        "type": media_type,
+        "offset": p.offset.unwrap_or(0),
+        "count": count
+    }))
+}
+
 fn require_confirmation(confirm: bool) -> Result<(), McpError> {
     if confirm {
         Ok(())
@@ -640,6 +690,27 @@ mod tests {
                 offset: None,
                 count: Some(21),
                 no_content: None
+            })
+            .is_err()
+        );
+    }
+
+    #[test]
+    fn permanent_media_defaults_to_images_and_validates_type() {
+        assert_eq!(
+            permanent_media_body(ListPermanentMedia {
+                media_type: None,
+                offset: None,
+                count: None,
+            })
+            .unwrap(),
+            json!({"type": "image", "offset": 0, "count": 20})
+        );
+        assert!(
+            permanent_media_body(ListPermanentMedia {
+                media_type: Some("document".into()),
+                offset: None,
+                count: None,
             })
             .is_err()
         );
