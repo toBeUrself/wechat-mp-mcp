@@ -243,38 +243,45 @@ impl BookNoteRenderer {
             architecture_html: escape_multiline(&note.summary),
             investment_thesis_html: escape_multiline(&note.summary),
             risk_html: escape_multiline(note.example.as_deref().unwrap_or("")),
-            book_meta: note.book_meta.as_ref().map(|meta| RenderBookMeta {
-                platform: meta
-                    .platform
-                    .as_deref()
-                    .filter(|v| !v.trim().is_empty())
-                    .unwrap_or("微信读书")
-                    .to_owned(),
-                rating: meta
-                    .rating
-                    .as_deref()
-                    .filter(|v| !v.trim().is_empty())
-                    .map(str::to_owned),
-                rating_count: meta
-                    .rating_count
-                    .as_deref()
-                    .filter(|v| !v.trim().is_empty())
-                    .map(str::to_owned),
-                want_to_read: meta
-                    .want_to_read
-                    .as_deref()
-                    .filter(|v| !v.trim().is_empty())
-                    .map(str::to_owned),
-                reading_count: meta
-                    .reading_count
-                    .as_deref()
-                    .filter(|v| !v.trim().is_empty())
-                    .map(str::to_owned),
-                url: meta
-                    .url
-                    .as_deref()
-                    .filter(|v| !v.trim().is_empty())
-                    .map(str::to_owned),
+            book_meta: note.book_meta.as_ref().and_then(|meta| {
+                let rendered = RenderBookMeta {
+                    platform: meta
+                        .platform
+                        .as_deref()
+                        .filter(|v| !v.trim().is_empty())
+                        .unwrap_or("微信读书")
+                        .to_owned(),
+                    rating: meta
+                        .rating
+                        .as_deref()
+                        .filter(|v| !v.trim().is_empty())
+                        .map(str::to_owned),
+                    rating_count: meta
+                        .rating_count
+                        .as_deref()
+                        .filter(|v| !v.trim().is_empty())
+                        .map(str::to_owned),
+                    want_to_read: meta
+                        .want_to_read
+                        .as_deref()
+                        .filter(|v| !v.trim().is_empty())
+                        .map(str::to_owned),
+                    reading_count: meta
+                        .reading_count
+                        .as_deref()
+                        .filter(|v| !v.trim().is_empty())
+                        .map(str::to_owned),
+                    url: meta
+                        .url
+                        .as_deref()
+                        .filter(|v| !v.trim().is_empty())
+                        .map(str::to_owned),
+                };
+
+                (rendered.rating.is_some()
+                    || rendered.want_to_read.is_some()
+                    || rendered.reading_count.is_some())
+                .then_some(rendered)
             }),
         };
         let template_name = match note.style {
@@ -463,6 +470,22 @@ mod tests {
         let rendered = BookNoteRenderer::new().unwrap().render(&input).unwrap();
         assert!(!rendered.html.contains("书中案例"));
     }
+
+    #[test]
+    fn omits_empty_book_meta_section() {
+        let mut input = note();
+        input.book_meta = Some(BookMetaInput {
+            platform: Some("微信读书".into()),
+            rating: None,
+            rating_count: None,
+            want_to_read: None,
+            reading_count: None,
+            url: None,
+        });
+        let rendered = BookNoteRenderer::new().unwrap().render(&input).unwrap();
+        assert!(!rendered.html.contains("阅读参考"));
+    }
+
     #[test]
     fn escapes_untrusted_text() {
         let mut input = note();
